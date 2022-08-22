@@ -1,18 +1,16 @@
 TODO list:
 
-1. fix the scanner input
+1. Employee Login
 
-2. Employee Login
+2. update opening the account with a transaction
 
-3. update opening the account with a transaction
+3. Soft Delete
 
-4. Soft Delete
+4. exception handling for the methods
 
-5. exception handling for the methods
+5. clean up the output in the presentation layer
 
-6. clean up the output in the presentation layer
-
-7. recipient for transactions
+6. recipient for transactions
 
 
 
