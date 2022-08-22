@@ -10,7 +10,7 @@ public interface AccountDao {
 	
 	public AccountPojo createAccount(AccountPojo accountPojo);
 	
-    AccountPojo updateAccount(AccountPojo accountPojo);
+    AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate);
 	
 	public void deleteAccount(AccountPojo accountPojo);
 	

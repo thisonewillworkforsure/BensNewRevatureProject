@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import dao.HandleUpdate;
+import dao.HandleUpdateBalanceImp;
+import dao.HandleUpdatePasswordImp;
 import pojo.AccountPojo;
 import pojo.TransactionPojo;
 import service.AccountService;
@@ -15,6 +18,7 @@ public class Project_Demo {
 	private static Scanner scanner;
 	private static AccountPojo accountPojo;
 	private static AccountService accountServiceImp;
+	private static HandleUpdate handleUpdate;
 	private static void bla() {
 		System.out.println("whoaaaaaaaa");
 	}
@@ -23,7 +27,7 @@ public class Project_Demo {
 		bla();
 		scanner = new Scanner(System.in);
 		accountServiceImp = new AccountServiceImp();
-		System.out.println("Hello and Welcome to Bank of America's Console Banking!");
+		System.out.println("Hello and Welcome to Umbrella Corporation's Console Banking!");
 		boolean isDone = false;
 		char choice = '0';
 	   
@@ -31,7 +35,8 @@ public class Project_Demo {
 			System.out.println("MAIN MENU ------------------");
 			System.out.println("1. Login as an Employee");
 			System.out.println("2. Login as a Customer");
-			System.out.println("3. Exit");
+			System.out.println("3. Forgot Password?");
+			System.out.println("4. Exit");
 
 			choice = scanner.next().charAt(0);
 
@@ -48,9 +53,15 @@ public class Project_Demo {
 				break; // break for case 2 - customer
 
 			case '3':
+				implementPasswordReset();
+				break;
+				
+			case '4':
 				System.out.println("Have a nice day!");
 				isDone = true;
 				break;
+				
+				
 			default:
 				System.out.println("Invalid Input, please try again...");
 
@@ -122,19 +133,25 @@ public class Project_Demo {
 		System.out.println("enter username");
 		accountPojo.setUserName(scanner.next());
 		System.out.println("Now Password");
-		accountPojo.setPassword(scanner.next());
+		String attemptedPasswordString = scanner.next();
 		accountPojo = accountServiceImp.getOneAccount(accountPojo);
-		if (accountPojo != null) {
-			System.out.println("WELCOME " + accountPojo.getFirstName());
-		} else {
+		if(accountPojo == null) {
 			System.out.println("Nothing found with user name and password input");
 			return;
 		}
+		boolean isNotEquals = !attemptedPasswordString.equals(accountPojo.getPassword());
+		if(isNotEquals) {
+			System.out.println("Incorrect Password");
+			return;
+		}
+		System.out.println("WELCOME " + accountPojo.getFirstName());
 
+		handleUpdate = new HandleUpdateBalanceImp();
+		
 		while (!isCustomerMenuDone) {
 			System.out.println("CUSTOMER MENU -----------------------");
 			System.out.println("1. View account details");
-			System.out.println("2. Depost");
+			System.out.println("2. Deposit");
 			System.out.println("3. Withdraw");
 			System.out.println("4. View Transaction History");
 			System.out.println("5. Logout");
@@ -155,7 +172,8 @@ public class Project_Demo {
 				float amountFloat = scanner.nextFloat();
 				accountPojo = accountServiceImp.getOneAccount(accountPojo);
 				accountPojo.setBalanceChangeAmount(amountFloat);
-				accountPojo = accountServiceImp.updateAccount(accountPojo);
+				handleUpdate = new HandleUpdateBalanceImp();
+				accountPojo = accountServiceImp.updateAccount(accountPojo, handleUpdate);
 				if (accountPojo != null) {
 					System.out.println(accountPojo);
 				} else {
@@ -172,7 +190,8 @@ public class Project_Demo {
 					break;
 				}
 				accountPojo.setBalanceChangeAmount(amountFloatWithdraw * -1);
-				accountPojo = accountServiceImp.updateAccount(accountPojo);
+				handleUpdate = new HandleUpdateBalanceImp();
+				accountPojo = accountServiceImp.updateAccount(accountPojo, handleUpdate);
 				if (accountPojo != null) {
 					System.out.println(accountPojo);
 				} else {
@@ -200,7 +219,37 @@ public class Project_Demo {
 	}
 	
 	
-	
+	private static void implementPasswordReset() {
+		accountPojo = new AccountPojo();
+		System.out.println("Enter your Username");
+		String user_name = scanner.next();
+		accountPojo.setUserName(user_name);
+		accountPojo = accountServiceImp.getOneAccount(accountPojo);
+		if(accountPojo == null) {
+			System.out.println("User name wasn't found");
+			return;
+		}
+		System.out.println("Enter your new password");
+		String firstPasswordString = scanner.next();
+		System.out.println("Enter it again for confirmation");
+		String secondPasswordString = scanner.next();
+		
+		if(!firstPasswordString.equals(secondPasswordString)) {
+			System.out.println("They didn't match, password did not change");
+			return;
+		}
+		accountPojo.setPassword(firstPasswordString);
+		handleUpdate = new HandleUpdatePasswordImp();
+		accountServiceImp.updateAccount(accountPojo, handleUpdate);
+		if(accountPojo != null) {
+			System.out.println("Your password was changed successfully");
+		}
+		else {
+			System.out.println("There was an error, your password did not change");
+		}
+		
+		
+	}
 	
 	
 	

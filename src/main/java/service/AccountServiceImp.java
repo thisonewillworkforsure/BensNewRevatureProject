@@ -7,6 +7,7 @@ import javax.xml.crypto.Data;
 
 import dao.AccountDao;
 import dao.DatabaseManager;
+import dao.HandleUpdate;
 import pojo.AccountPojo;
 import pojo.TransactionPojo;
 
@@ -33,9 +34,9 @@ public class AccountServiceImp implements AccountService {
 		return accountPojo;
 	}
 
-	public AccountPojo updateAccount(AccountPojo accountPojo) {
+	public AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate) {
 		// TODO Auto-generated method stub
-		return accountDao.updateAccount(accountPojo);
+		return accountDao.updateAccount(accountPojo, handleUpdate);
 		
 	}
 

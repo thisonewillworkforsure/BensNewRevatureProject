@@ -2,6 +2,7 @@ package service;
 
 import java.util.List;
 
+import dao.HandleUpdate;
 import pojo.AccountPojo;
 import pojo.TransactionPojo;
 
@@ -11,7 +12,7 @@ public interface AccountService {
 	
 	public AccountPojo createAccount(AccountPojo accountPojo);
 	
-    AccountPojo updateAccount(AccountPojo accountPojo);
+    AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate);
 	
 	public void deleteAccount(AccountPojo accountPojo);
 	
