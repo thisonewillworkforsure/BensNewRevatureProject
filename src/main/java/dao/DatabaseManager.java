@@ -135,11 +135,20 @@ public class DatabaseManager implements AccountDao{
 		try {
 			Connection newConnection = DBUtil.makeConnection();
 			Statement statement = newConnection.createStatement();
-			
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM bank_transaction;");
+			ResultSet resultSet;
+			if(amountTransactions > 0) {
+					resultSet = statement.executeQuery("SELECT * FROM bank_transaction "
+					+ "WHERE account_id = " + accountPojo.getId() + " ORDER BY transaction_id DESC LIMIT " + amountTransactions + ";");
+			}
+			else {
+				
+				resultSet = statement.executeQuery("SELECT * FROM bank_transaction "
+						+ "WHERE account_id = " + accountPojo.getId() + " ORDER BY transaction_id DESC;");
+			}
 			List<TransactionPojo> transactionPojos = new ArrayList<TransactionPojo>();
 			
-			while(resultSet.next()) {
+			int i = 0;
+			while(resultSet.next() && (i < amountTransactions || amountTransactions == 0)) {
 				TransactionPojo temPojo = new TransactionPojo();
 				temPojo.setAccountID(resultSet.getInt("account_id"));
 				temPojo.setTransactionID(resultSet.getInt("transaction_id"));
@@ -147,6 +156,7 @@ public class DatabaseManager implements AccountDao{
 				temPojo.setTransactionType(resultSet.getString("transaction_type"));
 				temPojo.setTransactionAmount(resultSet.getDouble("transaction_amount"));
 				transactionPojos.add(temPojo);
+				i++;
 			}
 			return transactionPojos;
 			

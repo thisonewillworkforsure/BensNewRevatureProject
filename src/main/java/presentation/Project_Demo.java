@@ -202,7 +202,9 @@ public class Project_Demo {
 				System.out.println("Viewing Transaction History");
 				accountPojo = accountServiceImp.getOneAccount(accountPojo);
 				List<TransactionPojo> transactionPojos = new ArrayList<TransactionPojo>();
-				transactionPojos = accountServiceImp.getTransactions(accountPojo, 1);
+				System.out.println("Enter amount of transactions you want to see, for all enter 0");
+				Integer amountTransactions = scanner.nextInt();
+				transactionPojos = accountServiceImp.getTransactions(accountPojo, amountTransactions);
 				for(int i = 0; i < transactionPojos.size();i++) {
 					System.out.println(transactionPojos.get(i));
 				}
