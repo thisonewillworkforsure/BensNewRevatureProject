@@ -14,7 +14,7 @@ import service.AccountServiceImp;
 
 public class Project_Demo {
 
-	private static Scanner scanner;
+	private static ScannerHandler scannerHandler;
 	private static AccountPojo accountPojo;
 	private static AccountService accountServiceImp;
 	private static HandleUpdate handleUpdate;
@@ -26,7 +26,8 @@ public class Project_Demo {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		bla();
-		scanner = new Scanner(System.in);
+		
+		scannerHandler = new ScannerHandler();
 		accountServiceImp = new AccountServiceImp();
 		System.out.println("Hello and Welcome to Umbrella Corporation's Console Banking!");
 		boolean isDone = false;
@@ -38,9 +39,10 @@ public class Project_Demo {
 			System.out.println("2. Login as a Customer");
 			System.out.println("3. Forgot Password?");
 			System.out.println("4. Exit");
-
-			choice = scanner.next().charAt(0);
-
+			
+			
+			choice = scannerHandler.getInputChar();
+			//scanner.nextLine();
 			switch (choice) {
 			case '1':
 				implementEmployeeMenu();
@@ -66,7 +68,7 @@ public class Project_Demo {
 
 			}
 		}
-		scanner.close();
+		scannerHandler.close();
 
 	}
 
@@ -81,22 +83,22 @@ public class Project_Demo {
 			System.out.println("2. List all Customers");
 			System.out.println("3. Logout");
 
-			choice = scanner.next().charAt(0);
+			choice = scannerHandler.getInputChar();
 
 			switch (choice) {
 			case '1':
 				System.out.println("1. Register/Create a Customer");
 				accountPojo = new AccountPojo();
 				System.out.println("first name");
-				accountPojo.setFirstName(scanner.next());
+				accountPojo.setFirstName(scannerHandler.getInputString());
 				System.out.println("last name");
-				accountPojo.setLastName(scanner.next());
+				accountPojo.setLastName(scannerHandler.getInputString());
 				System.out.println("enter userName");
-				accountPojo.setUserName(scanner.next());
+				accountPojo.setUserName(scannerHandler.getInputString());
 				System.out.println("enter password");
-				accountPojo.setPassword(scanner.next());
+				accountPojo.setPassword(scannerHandler.getInputString());
 				System.out.print("any money to put in now?");
-				accountPojo.setBalance(scanner.nextFloat());
+				accountPojo.setBalance(scannerHandler.getInputFloat());
 				accountPojo = accountServiceImp.createAccount(accountPojo);
 				if (accountPojo != null) {
 					System.out.println("Success! Account details are: " + accountPojo);
@@ -129,9 +131,9 @@ public class Project_Demo {
 
 		accountPojo = new AccountPojo();
 		System.out.println("enter username");
-		accountPojo.setUserName(scanner.next());
+		accountPojo.setUserName(scannerHandler.getInputString());
 		System.out.println("Now Password");
-		String attemptedPasswordString = scanner.next();
+		String attemptedPasswordString = scannerHandler.getInputString();
 		accountPojo = accountServiceImp.getOneAccount(accountPojo);
 		if (accountPojo == null) {
 			System.out.println("Nothing found with user name and password input");
@@ -155,7 +157,7 @@ public class Project_Demo {
 			System.out.println("5. Close Account");
 			System.out.println("6. Logout");
 			int choice;
-			choice = scanner.next().charAt(0);
+			choice = scannerHandler.getInputChar();
 
 			switch (choice) {
 			case '1':
@@ -168,7 +170,7 @@ public class Project_Demo {
 				break;
 			case '2':
 				System.out.println("How much do you want to deposit?");
-				float amountFloat = scanner.nextFloat();
+				float amountFloat = scannerHandler.getInputFloat();
 				accountPojo = accountServiceImp.getOneAccount(accountPojo);
 				accountPojo.setBalanceChangeAmount(amountFloat);
 				handleUpdate = new HandleUpdateBalanceImp();
@@ -181,7 +183,7 @@ public class Project_Demo {
 				break;
 			case '3':
 				System.out.println("How much you want taken out?");
-				float amountFloatWithdraw = scanner.nextFloat();
+				float amountFloatWithdraw = scannerHandler.getInputFloat();
 				accountPojo = accountServiceImp.getOneAccount(accountPojo);
 				float currentBalanceWithdraw = accountPojo.getBalance();
 				if (currentBalanceWithdraw - amountFloatWithdraw < 0) {
@@ -202,7 +204,7 @@ public class Project_Demo {
 				accountPojo = accountServiceImp.getOneAccount(accountPojo);
 				List<TransactionPojo> transactionPojos = new ArrayList<TransactionPojo>();
 				System.out.println("Enter amount of transactions you want to see, for all enter 0");
-				Integer amountTransactions = scanner.nextInt();
+				Integer amountTransactions = scannerHandler.getInputInt();
 				transactionPojos = accountServiceImp.getTransactions(accountPojo, amountTransactions);
 				for (int i = 0; i < transactionPojos.size(); i++) {
 					System.out.println(transactionPojos.get(i));
@@ -211,13 +213,13 @@ public class Project_Demo {
 			case '5':
 				accountPojo = accountServiceImp.getOneAccount(accountPojo);
 				System.out.println("Do you really want to close your account? type y if so");
-				char willDelete = scanner.next().charAt(0);
+				char willDelete = scannerHandler.getInputChar();
 				if (willDelete != 'y' && willDelete != 'Y') {
 					System.out.println("That's ok we knew you would stay with us, good ol Umbrella....");
 					break;
 				}
 				System.out.println("No really do you seriously want to close your account? type y if so");
-				willDelete = scanner.next().charAt(0);
+				willDelete = scannerHandler.getInputChar();
 				if (willDelete != 'y' && willDelete != 'Y') {
 					System.out.println(
 							"That's ok we knew you would stay with us, good ol Umbrella.... scared us a sec though.");
@@ -243,7 +245,7 @@ public class Project_Demo {
 	private static void implementPasswordReset() {
 		accountPojo = new AccountPojo();
 		System.out.println("Enter your Username");
-		String user_name = scanner.next();
+		String user_name = scannerHandler.getInputString();
 		accountPojo.setUserName(user_name);
 		accountPojo = accountServiceImp.getOneAccount(accountPojo);
 		if (accountPojo == null) {
@@ -251,9 +253,9 @@ public class Project_Demo {
 			return;
 		}
 		System.out.println("Enter your new password");
-		String firstPasswordString = scanner.next();
+		String firstPasswordString = scannerHandler.getInputString();
 		System.out.println("Enter it again for confirmation");
-		String secondPasswordString = scanner.next();
+		String secondPasswordString = scannerHandler.getInputString();
 
 		if (!firstPasswordString.equals(secondPasswordString)) {
 			System.out.println("They didn't match, password did not change");
