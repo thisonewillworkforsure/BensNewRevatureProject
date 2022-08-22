@@ -42,7 +42,7 @@ public class AccountServiceImp implements AccountService {
 
 	public void deleteAccount(AccountPojo accountPojo) {
 		// TODO Auto-generated method stub
-		
+		accountDao.deleteAccount(accountPojo);
 	}
 
 	public AccountPojo getOneAccount(AccountPojo accountPojo) {

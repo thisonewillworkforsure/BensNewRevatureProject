@@ -95,6 +95,17 @@ public class DatabaseManager implements AccountDao{
 
 	public void deleteAccount(AccountPojo accountPojo) {
 		// TODO Auto-generated method stub
+		String sqlString = "DELETE FROM account WHERE id= ?;";
+		try{
+			Connection newConnection = DBUtil.makeConnection();
+			PreparedStatement preparedStatement = newConnection.prepareCall(sqlString);
+			preparedStatement.setInt(1, accountPojo.getId());
+			int rowsAffected = preparedStatement.executeUpdate();
+			if(rowsAffected > 0) accountPojo = null;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

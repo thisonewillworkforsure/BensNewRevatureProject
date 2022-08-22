@@ -14,14 +14,15 @@ import service.AccountServiceImp;
 
 public class Project_Demo {
 
-		
 	private static Scanner scanner;
 	private static AccountPojo accountPojo;
 	private static AccountService accountServiceImp;
 	private static HandleUpdate handleUpdate;
+
 	private static void bla() {
 		System.out.println("whoaaaaaaaa");
 	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		bla();
@@ -30,7 +31,7 @@ public class Project_Demo {
 		System.out.println("Hello and Welcome to Umbrella Corporation's Console Banking!");
 		boolean isDone = false;
 		char choice = '0';
-	   
+
 		while (!isDone) {
 			System.out.println("MAIN MENU ------------------");
 			System.out.println("1. Login as an Employee");
@@ -49,19 +50,17 @@ public class Project_Demo {
 
 				implementCustomerMenu();
 
-			
 				break; // break for case 2 - customer
 
 			case '3':
 				implementPasswordReset();
 				break;
-				
+
 			case '4':
 				System.out.println("Have a nice day!");
 				isDone = true;
 				break;
-				
-				
+
 			default:
 				System.out.println("Invalid Input, please try again...");
 
@@ -70,9 +69,9 @@ public class Project_Demo {
 		scanner.close();
 
 	}
-	
+
 	private static void implementEmployeeMenu() {
-		
+
 		int choice;
 		boolean isMenuDone = false;
 		while (!isMenuDone) {
@@ -122,10 +121,9 @@ public class Project_Demo {
 				System.out.println("Invalid Input, please try again...");
 			}
 		}
-		
-		
+
 	}
-	
+
 	private static void implementCustomerMenu() {
 		boolean isCustomerMenuDone = false;
 
@@ -135,26 +133,27 @@ public class Project_Demo {
 		System.out.println("Now Password");
 		String attemptedPasswordString = scanner.next();
 		accountPojo = accountServiceImp.getOneAccount(accountPojo);
-		if(accountPojo == null) {
+		if (accountPojo == null) {
 			System.out.println("Nothing found with user name and password input");
 			return;
 		}
 		boolean isNotEquals = !attemptedPasswordString.equals(accountPojo.getPassword());
-		if(isNotEquals) {
+		if (isNotEquals) {
 			System.out.println("Incorrect Password");
 			return;
 		}
 		System.out.println("WELCOME " + accountPojo.getFirstName());
 
 		handleUpdate = new HandleUpdateBalanceImp();
-		
+
 		while (!isCustomerMenuDone) {
 			System.out.println("CUSTOMER MENU -----------------------");
 			System.out.println("1. View account details");
 			System.out.println("2. Deposit");
 			System.out.println("3. Withdraw");
 			System.out.println("4. View Transaction History");
-			System.out.println("5. Logout");
+			System.out.println("5. Close Account");
+			System.out.println("6. Logout");
 			int choice;
 			choice = scanner.next().charAt(0);
 
@@ -185,7 +184,7 @@ public class Project_Demo {
 				float amountFloatWithdraw = scanner.nextFloat();
 				accountPojo = accountServiceImp.getOneAccount(accountPojo);
 				float currentBalanceWithdraw = accountPojo.getBalance();
-				if(currentBalanceWithdraw - amountFloatWithdraw < 0) {
+				if (currentBalanceWithdraw - amountFloatWithdraw < 0) {
 					System.out.println("You are withdrawing more than thats in the account...");
 					break;
 				}
@@ -205,29 +204,49 @@ public class Project_Demo {
 				System.out.println("Enter amount of transactions you want to see, for all enter 0");
 				Integer amountTransactions = scanner.nextInt();
 				transactionPojos = accountServiceImp.getTransactions(accountPojo, amountTransactions);
-				for(int i = 0; i < transactionPojos.size();i++) {
+				for (int i = 0; i < transactionPojos.size(); i++) {
 					System.out.println(transactionPojos.get(i));
 				}
 				break;
 			case '5':
+				accountPojo = accountServiceImp.getOneAccount(accountPojo);
+				System.out.println("Do you really want to close your account? type y if so");
+				char willDelete = scanner.next().charAt(0);
+				if (willDelete != 'y' && willDelete != 'Y') {
+					System.out.println("That's ok we knew you would stay with us, good ol Umbrella....");
+					break;
+				}
+				System.out.println("No really do you seriously want to close your account? type y if so");
+				willDelete = scanner.next().charAt(0);
+				if (willDelete != 'y' && willDelete != 'Y') {
+					System.out.println(
+							"That's ok we knew you would stay with us, good ol Umbrella.... scared us a sec though.");
+					break;
+				}
+				accountServiceImp.deleteAccount(accountPojo);
+				System.out.println("Your account was succesfully deleted, you will pay for- I mean have a good day!");
+				isCustomerMenuDone = true;
+
+				break;
+			case '6':
 				System.out.println("Logging out");
 				isCustomerMenuDone = true;
 				break;
 			default:
 				System.out.println("Invalid Input, please try again...");
+
 			}
 
 		}
 	}
-	
-	
+
 	private static void implementPasswordReset() {
 		accountPojo = new AccountPojo();
 		System.out.println("Enter your Username");
 		String user_name = scanner.next();
 		accountPojo.setUserName(user_name);
 		accountPojo = accountServiceImp.getOneAccount(accountPojo);
-		if(accountPojo == null) {
+		if (accountPojo == null) {
 			System.out.println("User name wasn't found");
 			return;
 		}
@@ -235,24 +254,20 @@ public class Project_Demo {
 		String firstPasswordString = scanner.next();
 		System.out.println("Enter it again for confirmation");
 		String secondPasswordString = scanner.next();
-		
-		if(!firstPasswordString.equals(secondPasswordString)) {
+
+		if (!firstPasswordString.equals(secondPasswordString)) {
 			System.out.println("They didn't match, password did not change");
 			return;
 		}
 		accountPojo.setPassword(firstPasswordString);
 		handleUpdate = new HandleUpdatePasswordImp();
 		accountServiceImp.updateAccount(accountPojo, handleUpdate);
-		if(accountPojo != null) {
+		if (accountPojo != null) {
 			System.out.println("Your password was changed successfully");
-		}
-		else {
+		} else {
 			System.out.println("There was an error, your password did not change");
 		}
-		
-		
+
 	}
-	
-	
-	
+
 }
