@@ -14,7 +14,7 @@ public interface AccountDao {
 	
 	public void deleteAccount(AccountPojo accountPojo);
 	
-	public AccountPojo getOneAccount(AccountPojo accountPojo);
+	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount);
 	
 	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions);
 }

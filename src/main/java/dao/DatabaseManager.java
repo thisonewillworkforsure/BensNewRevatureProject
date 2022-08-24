@@ -109,34 +109,9 @@ public class DatabaseManager implements AccountDao{
 		
 	}
 	
-	public AccountPojo getOneAccount(AccountPojo accountPojo) {
+	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) {
 		// TODO Auto-generated method stub
-		
-		String sqlString = "SELECT * FROM account WHERE user_name= ?";
-		try{
-			Connection newConnection = DBUtil.makeConnection();
-			PreparedStatement preparedStatement = newConnection.prepareCall(sqlString);
-			preparedStatement.setString(1, accountPojo.getUserName());
-			ResultSet resultSet = preparedStatement.executeQuery();
-			boolean isnull = true;
-			while(resultSet.next()) {
-				isnull = false;
-				accountPojo.setId(resultSet.getInt("id"));
-				accountPojo.setBalance(resultSet.getFloat("balance"));
-				accountPojo.setFirstName(resultSet.getString("first_name"));
-				accountPojo.setLastName(resultSet.getString("last_name"));
-				accountPojo.setUserName(resultSet.getString("user_name"));
-				accountPojo.setPassword(resultSet.getString("password"));
-			}
-			if(isnull) return null;
-			return accountPojo;
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		return null;
+		return handleGetOneAccount.handleGetOneAccount(accountPojo);
 	}
 
 

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import dao.HandleGetOneAccount;
+import dao.HandleGetOneCustomerImp;
+import dao.HandleGetOneEmployeeImp;
 import dao.HandleUpdate;
 import dao.HandleUpdateBalanceImp;
 import dao.HandleUpdatePasswordImp;
@@ -76,6 +79,10 @@ public class Project_Demo {
 
 		int choice;
 		boolean isMenuDone = false;
+		
+		if(!isLoginSuccessful(false)) return;
+		System.out.println("WELCOME " + accountPojo.getFirstName());
+		
 		while (!isMenuDone) {
 
 			System.out.println("EMPLOYEE MENU -----------------------");
@@ -105,7 +112,6 @@ public class Project_Demo {
 				} else {
 					System.out.println("Sorry Was Unsuccessful");
 				}
-				isMenuDone = true;
 				break;
 			case '2':
 				System.out.println("2. List all Customers");
@@ -129,21 +135,7 @@ public class Project_Demo {
 	private static void implementCustomerMenu() {
 		boolean isCustomerMenuDone = false;
 
-		accountPojo = new AccountPojo();
-		System.out.println("enter username");
-		accountPojo.setUserName(scannerHandler.getInputString());
-		System.out.println("Now Password");
-		String attemptedPasswordString = scannerHandler.getInputString();
-		accountPojo = accountServiceImp.getOneAccount(accountPojo);
-		if (accountPojo == null) {
-			System.out.println("Nothing found with user name and password input");
-			return;
-		}
-		boolean isNotEquals = !attemptedPasswordString.equals(accountPojo.getPassword());
-		if (isNotEquals) {
-			System.out.println("Incorrect Password");
-			return;
-		}
+		if(!isLoginSuccessful(true)) return;
 		System.out.println("WELCOME " + accountPojo.getFirstName());
 
 		handleUpdate = new HandleUpdateBalanceImp();
@@ -161,7 +153,7 @@ public class Project_Demo {
 
 			switch (choice) {
 			case '1':
-				accountPojo = accountServiceImp.getOneAccount(accountPojo);
+				accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 				if (accountPojo != null) {
 					System.out.println(accountPojo);
 				} else {
@@ -171,7 +163,7 @@ public class Project_Demo {
 			case '2':
 				System.out.println("How much do you want to deposit?");
 				float amountFloat = scannerHandler.getInputFloat();
-				accountPojo = accountServiceImp.getOneAccount(accountPojo);
+				accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 				accountPojo.setBalanceChangeAmount(amountFloat);
 				handleUpdate = new HandleUpdateBalanceImp();
 				accountPojo = accountServiceImp.updateAccount(accountPojo, handleUpdate);
@@ -184,7 +176,7 @@ public class Project_Demo {
 			case '3':
 				System.out.println("How much you want taken out?");
 				float amountFloatWithdraw = scannerHandler.getInputFloat();
-				accountPojo = accountServiceImp.getOneAccount(accountPojo);
+				accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 				float currentBalanceWithdraw = accountPojo.getBalance();
 				if (currentBalanceWithdraw - amountFloatWithdraw < 0) {
 					System.out.println("You are withdrawing more than thats in the account...");
@@ -201,7 +193,7 @@ public class Project_Demo {
 				break;
 			case '4':
 				System.out.println("Viewing Transaction History");
-				accountPojo = accountServiceImp.getOneAccount(accountPojo);
+				accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 				List<TransactionPojo> transactionPojos = new ArrayList<TransactionPojo>();
 				System.out.println("Enter amount of transactions you want to see, for all enter 0");
 				Integer amountTransactions = scannerHandler.getInputInt();
@@ -211,7 +203,7 @@ public class Project_Demo {
 				}
 				break;
 			case '5':
-				accountPojo = accountServiceImp.getOneAccount(accountPojo);
+				accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 				System.out.println("Do you really want to close your account? type y if so");
 				char willDelete = scannerHandler.getInputChar();
 				if (willDelete != 'y' && willDelete != 'Y') {
@@ -241,13 +233,37 @@ public class Project_Demo {
 
 		}
 	}
+	
+	private static boolean isLoginSuccessful(boolean isCustomer) {
+
+		accountPojo = new AccountPojo();
+		System.out.println("enter username");
+		accountPojo.setUserName(scannerHandler.getInputString());
+		System.out.println("Now Password");
+		String attemptedPasswordString = scannerHandler.getInputString();
+		HandleGetOneAccount handler = isCustomer? new HandleGetOneCustomerImp() : new HandleGetOneEmployeeImp();
+		accountPojo = accountServiceImp.getOneAccount(accountPojo, handler);
+		if (accountPojo == null) {
+			System.out.println("Nothing found with user name and password input");
+			return false;
+		}
+		boolean isNotEquals = !attemptedPasswordString.equals(accountPojo.getPassword());
+		if (isNotEquals) {
+			System.out.println("Incorrect Password");
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
 
 	private static void implementPasswordReset() {
 		accountPojo = new AccountPojo();
 		System.out.println("Enter your Username");
 		String user_name = scannerHandler.getInputString();
 		accountPojo.setUserName(user_name);
-		accountPojo = accountServiceImp.getOneAccount(accountPojo);
+		accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 		if (accountPojo == null) {
 			System.out.println("User name wasn't found");
 			return;
