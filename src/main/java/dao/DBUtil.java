@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import exception.ApplicationException;
+
 public class DBUtil {
 	
 	static Connection connection;
@@ -17,7 +19,7 @@ public class DBUtil {
 		}
 	}
 	
-	static Connection makeConnection() {
+	static Connection makeConnection() throws ApplicationException {
 		String urlString = "jdbc:postgresql://localhost:5432/bank";
 		String userString = "postgres";
 		String passwordString = "dataword622";
@@ -28,7 +30,7 @@ public class DBUtil {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException();
 		}
 		return connection;
 	}

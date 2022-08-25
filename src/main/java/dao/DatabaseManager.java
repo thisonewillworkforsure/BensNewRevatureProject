@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.ApplicationException;
 import pojo.AccountPojo;
 import pojo.TransactionPojo;
 
@@ -25,7 +26,7 @@ public class DatabaseManager implements AccountDao {
 		return databaseManager;
 	}
 
-	public List<AccountPojo> getAllAccount() {
+	public List<AccountPojo> getAllAccount() throws ApplicationException {
 
 		try {
 			Connection newConnection = DBUtil.makeConnection();
@@ -48,13 +49,11 @@ public class DatabaseManager implements AccountDao {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException();
 		}
-
-		return null;
 	}
 
-	public AccountPojo createAccount(AccountPojo accountPojo) {
+	public AccountPojo createAccount(AccountPojo accountPojo) throws ApplicationException {
 
 		String sqlString = "INSERT INTO account(first_name,last_name,password,balance,user_name) VALUES(?,?,?,?,?);";
 		try {
@@ -79,17 +78,17 @@ public class DatabaseManager implements AccountDao {
 				return accountPojo;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new ApplicationException();
 		}
 		return null;
 	}
 
-	public AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate) {
+	public AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate) throws ApplicationException {
 		// TODO Auto-generated method stub
 		return handleUpdate.performUpdate(accountPojo);
 	}
 
-	public void deleteAccount(AccountPojo accountPojo) {
+	public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
 		// TODO Auto-generated method stub
 		String sqlString = "DELETE FROM account WHERE id= ?;";
 		try {
@@ -100,18 +99,23 @@ public class DatabaseManager implements AccountDao {
 			if (rowsAffected > 0)
 				accountPojo = null;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new ApplicationException();
 		}
 
 	}
 
-	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) {
+	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
 		// TODO Auto-generated method stub
-		return handleGetOneAccount.handleGetOneAccount(accountPojo);
+		try {
+			return handleGetOneAccount.handleGetOneAccount(accountPojo);
+		} catch (Exception e) {
+			throw new ApplicationException();
+		}
+		
 	}
 
 	@Override
-	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions) {
+	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions) throws ApplicationException {
 		// TODO Auto-generated method stub
 		try {
 			Connection newConnection = DBUtil.makeConnection();
@@ -142,10 +146,8 @@ public class DatabaseManager implements AccountDao {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException();
 		}
-
-		return null;
 
 	}
 

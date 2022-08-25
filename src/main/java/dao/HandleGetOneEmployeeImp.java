@@ -5,15 +5,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.ApplicationException;
 import pojo.AccountPojo;
 
 public class HandleGetOneEmployeeImp implements HandleGetOneAccount {
 
 	@Override
-	public AccountPojo handleGetOneAccount(AccountPojo accountPojo) {
+	public AccountPojo handleGetOneAccount(AccountPojo accountPojo) throws ApplicationException {
 		String sqlString = "SELECT * FROM emp_account WHERE user_name= ?";
 		try{
-			Connection newConnection = DBUtil.makeConnection();
+			Connection newConnection = null;
+			try {
+				newConnection = DBUtil.makeConnection();
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			PreparedStatement preparedStatement = newConnection.prepareCall(sqlString);
 			preparedStatement.setString(1, accountPojo.getUserName());
 			ResultSet resultSet = preparedStatement.executeQuery();

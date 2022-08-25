@@ -9,6 +9,7 @@ import dao.AccountDao;
 import dao.DatabaseManager;
 import dao.HandleGetOneAccount;
 import dao.HandleUpdate;
+import exception.ApplicationException;
 import pojo.AccountPojo;
 import pojo.TransactionPojo;
 
@@ -22,40 +23,69 @@ public class AccountServiceImp implements AccountService {
 	}
 	
 	
-	public List<AccountPojo> getAllAccount() {
+	public List<AccountPojo> getAllAccount() throws ApplicationException {
 		// TODO Auto-generated method stub
 		List<AccountPojo> accountPojos = new ArrayList<AccountPojo>();
-		accountPojos = accountDao.getAllAccount();
+		try {
+			accountPojos = accountDao.getAllAccount();
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException();
+		}
 		return accountPojos;
 	}
 
-	public AccountPojo createAccount(AccountPojo accountPojo) {
+	public AccountPojo createAccount(AccountPojo accountPojo) throws ApplicationException {
 		// TODO Auto-generated method stub
-		accountPojo = accountDao.createAccount(accountPojo);
+		try {
+			accountPojo = accountDao.createAccount(accountPojo);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException();
+		}
 		return accountPojo;
 	}
 
-	public AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate) {
+	public AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate) throws ApplicationException {
 		// TODO Auto-generated method stub
-		return accountDao.updateAccount(accountPojo, handleUpdate);
-		
+		try {
+			return accountDao.updateAccount(accountPojo, handleUpdate);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException();
+		}
 	}
 
-	public void deleteAccount(AccountPojo accountPojo) {
+	public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
 		// TODO Auto-generated method stub
-		accountDao.deleteAccount(accountPojo);
+		try {
+			accountDao.deleteAccount(accountPojo);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException();
+		}
 	}
 
-	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) {
+	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
 		// TODO Auto-generated method stub
-		return accountDao.getOneAccount(accountPojo, handleGetOneAccount);
+		try {
+			return accountDao.getOneAccount(accountPojo, handleGetOneAccount);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException();
+		}
 	}
 
 
-	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions) {
+	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions) throws ApplicationException {
 		// TODO Auto-generated method stub
 		List<TransactionPojo> transactionPojos = new ArrayList<TransactionPojo>();
-		transactionPojos = accountDao.getTransactions(accountPojo, amountTransactions);
+		try {
+			transactionPojos = accountDao.getTransactions(accountPojo, amountTransactions);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException();
+		}
 		return transactionPojos;
 	}
 

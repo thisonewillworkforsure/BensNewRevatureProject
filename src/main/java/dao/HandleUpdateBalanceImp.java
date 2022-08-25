@@ -5,19 +5,26 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import exception.ApplicationException;
 import pojo.AccountPojo;
 
 public class HandleUpdateBalanceImp implements HandleUpdate {
 
 	@Override
-	public AccountPojo performUpdate(AccountPojo accountPojo) {
+	public AccountPojo performUpdate(AccountPojo accountPojo) throws ApplicationException {
 		// TODO Auto-generated method stub
 		
 		
 		String sqlString = "UPDATE account SET balance = ? WHERE id = ?";
 		String accountString = "INSERT INTO bank_transaction(account_id,transaction_date,transaction_type,transaction_amount) VALUES(?,?,?,?);";
 		try{
-			Connection newConnection = DBUtil.makeConnection();
+			Connection newConnection = null;
+			try {
+				newConnection = DBUtil.makeConnection();
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			PreparedStatement preparedStatement = newConnection.prepareStatement(sqlString);
 			preparedStatement.setDouble(1, accountPojo.getBalance()+accountPojo.getBalanceChangeAmount());
 			preparedStatement.setInt(2, accountPojo.getId());
@@ -33,7 +40,7 @@ public class HandleUpdateBalanceImp implements HandleUpdate {
 				return accountPojo;}
 		}
 		catch(SQLException e) {
-			e.printStackTrace();
+			throw new ApplicationException();
 		}
 		
 		
