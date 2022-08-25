@@ -1,14 +1,12 @@
 TODO list:
 
-1. update opening the account with a transaction
+1. Soft Delete
 
-2. Soft Delete
+2. exception handling for the methods
 
-3. exception handling for the methods
+3. clean up the output in the presentation layer
 
-4. clean up the output in the presentation layer
-
-5. recipient for transactions
+4. recipient for transactions
 
 
 

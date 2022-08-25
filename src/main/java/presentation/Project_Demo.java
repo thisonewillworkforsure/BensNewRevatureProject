@@ -105,7 +105,7 @@ public class Project_Demo {
 				System.out.println("enter password");
 				accountPojo.setPassword(scannerHandler.getInputString());
 				System.out.print("any money to put in now?");
-				accountPojo.setBalance(scannerHandler.getInputFloat());
+				accountPojo.setBalanceChangeAmount(scannerHandler.getInputFloat());
 				accountPojo = accountServiceImp.createAccount(accountPojo);
 				if (accountPojo != null) {
 					System.out.println("Success! Account details are: " + accountPojo);
