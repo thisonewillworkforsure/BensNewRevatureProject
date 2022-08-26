@@ -4,9 +4,11 @@ TODO list:
 
 2. exception handling for the methods
 
-3. clean up the output in the presentation layer
+3. add a TDD for the service layer
 
-4. recipient for transactions
+4. clean up the output in the presentation layer
+
+5. recipient for transactions
 
 
 

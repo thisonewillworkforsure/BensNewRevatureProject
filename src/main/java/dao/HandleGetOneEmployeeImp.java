@@ -10,7 +10,6 @@ import pojo.AccountPojo;
 
 public class HandleGetOneEmployeeImp implements HandleGetOneAccount {
 
-	@Override
 	public AccountPojo handleGetOneAccount(AccountPojo accountPojo) throws ApplicationException {
 		String sqlString = "SELECT * FROM emp_account WHERE user_name= ?";
 		try{

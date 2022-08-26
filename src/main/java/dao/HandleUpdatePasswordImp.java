@@ -10,7 +10,6 @@ import pojo.AccountPojo;
 
 public class HandleUpdatePasswordImp implements HandleUpdate {
 
-	@Override
 	public AccountPojo performUpdate(AccountPojo accountPojo) throws ApplicationException {
 		// TODO Auto-generated method stub
 

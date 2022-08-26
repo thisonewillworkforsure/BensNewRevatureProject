@@ -114,7 +114,6 @@ public class DatabaseManager implements AccountDao {
 		
 	}
 
-	@Override
 	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions) throws ApplicationException {
 		// TODO Auto-generated method stub
 		try {
