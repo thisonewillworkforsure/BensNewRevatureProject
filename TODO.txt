@@ -1,8 +1,8 @@
 TODO list:
 
-1. Soft Delete
+1. Implement Logging
 
-2. exception handling for the methods
+2. Soft Delete
 
 3. add a TDD for the service layer
 

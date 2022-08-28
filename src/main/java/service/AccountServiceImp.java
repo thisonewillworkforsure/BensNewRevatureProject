@@ -30,7 +30,7 @@ public class AccountServiceImp implements AccountService {
 			accountPojos = accountDao.getAllAccount();
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw e;
 		}
 		return accountPojos;
 	}
@@ -41,7 +41,7 @@ public class AccountServiceImp implements AccountService {
 			accountPojo = accountDao.createAccount(accountPojo);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw e;
 		}
 		return accountPojo;
 	}
@@ -52,7 +52,7 @@ public class AccountServiceImp implements AccountService {
 			return accountDao.updateAccount(accountPojo, handleUpdate);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw e;
 		}
 	}
 
@@ -62,7 +62,7 @@ public class AccountServiceImp implements AccountService {
 			accountDao.deleteAccount(accountPojo);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw e;
 		}
 	}
 
@@ -72,7 +72,7 @@ public class AccountServiceImp implements AccountService {
 			return accountDao.getOneAccount(accountPojo, handleGetOneAccount);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw e;
 		}
 	}
 
@@ -84,7 +84,7 @@ public class AccountServiceImp implements AccountService {
 			transactionPojos = accountDao.getTransactions(accountPojo, amountTransactions);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw e;
 		}
 		return transactionPojos;
 	}

@@ -119,7 +119,7 @@ public class Project_Demo {
 				float amountFloat;
 				try {
 					amountFloat = scannerHandler.getInputFloat();
-				} catch (InputMismatchException e) {
+				} catch (NumberFormatException e) {
 					System.out.println("Invalid input, please try again!");
 					break;
 				}
@@ -230,7 +230,13 @@ public class Project_Demo {
 				break;
 			case '3':
 				System.out.println("How much you want taken out?");
-				float amountFloatWithdraw = scannerHandler.getInputFloat();
+				float amountFloatWithdraw = 0f;
+				try {
+					amountFloatWithdraw = scannerHandler.getInputFloat();
+				} catch (Exception e) {
+					System.out.println("Invalid input, please try again!");
+					break;
+				}
 				try {
 					accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 				} catch (ApplicationException e) {
@@ -269,7 +275,16 @@ public class Project_Demo {
 				}
 				List<TransactionPojo> transactionPojos = new ArrayList<TransactionPojo>();
 				System.out.println("Enter amount of transactions you want to see, for all enter 0");
-				Integer amountTransactions = scannerHandler.getInputInt();
+				Integer amountTransactions = 0;
+				try {
+					amountTransactions = scannerHandler.getInputInt();
+				} catch (NumberFormatException e) {
+					System.out.println("Invalid Input, please try again!");
+				}
+				if(amountTransactions < 0) {
+					System.out.println("Input is less than 0, we can't process this, please try again!");
+					break;
+				}
 				try {
 					transactionPojos = accountServiceImp.getTransactions(accountPojo, amountTransactions);
 				} catch (ApplicationException e) {

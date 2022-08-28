@@ -49,7 +49,7 @@ public class DatabaseManager implements AccountDao {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw new ApplicationException("There was an sql exception, please try again");
 		}
 	}
 
@@ -78,7 +78,7 @@ public class DatabaseManager implements AccountDao {
 				return accountPojo;
 			}
 		} catch (SQLException e) {
-			throw new ApplicationException();
+			throw new ApplicationException("Failed to create an account, please try again another time.");
 		}
 		return null;
 	}
