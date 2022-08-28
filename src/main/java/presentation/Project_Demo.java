@@ -17,17 +17,25 @@ import pojo.TransactionPojo;
 import service.AccountService;
 import service.AccountServiceImp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.BasicConfigurator;  
-import org.apache.log4j.LogManager;  
-import org.apache.log4j.Logger;  
+import ch.qos.logback.classic.BasicConfigurator;
+
+
+
+
+
+//import org.apache.log4j.BasicConfigurator;  
+//import org.apache.log4j.LogManager;  
+//import org.apache.log4j.Logger;  
 
 
 
 
 public class Project_Demo {
 
-	private static final Logger logger = LogManager.getLogger(Project_Demo.class);  
+	private static final Logger logger = LoggerFactory.getLogger(Project_Demo.class); 
 	private static ScannerHandler scannerHandler;
 	private static AccountPojo accountPojo;
 	private static AccountService accountServiceImp;
@@ -39,8 +47,8 @@ public class Project_Demo {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		BasicConfigurator.configure();
-		logger.info("using the logger!");
+		//BasicConfigurator.configure();
+		logger.info("Starting the application!");
 		scannerHandler = new ScannerHandler();
 		accountServiceImp = new AccountServiceImp();
 		System.out.println("Hello and Welcome to Umbrella Corporation's Console Banking!");

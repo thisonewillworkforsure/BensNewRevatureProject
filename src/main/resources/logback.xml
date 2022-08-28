@@ -23,7 +23,7 @@
 	</appender>
 
 	<root level="info">
-		<appender-ref ref="STDOUT" />
+		<!-- <appender-ref ref="STDOUT" /> --> <!-- this line is commented because we dont want to log to the console -->
 		<appender-ref ref="rollingFile" />
 	</root>
 

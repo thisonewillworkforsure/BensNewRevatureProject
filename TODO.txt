@@ -1,14 +1,12 @@
 TODO list:
 
-1. Implement Logging
+1. Soft Delete
 
-2. Soft Delete
+2. add a TDD for the service layer
 
-3. add a TDD for the service layer
+3. clean up the output in the presentation layer
 
-4. clean up the output in the presentation layer
-
-5. recipient for transactions
+4. recipient for transactions
 
 
 

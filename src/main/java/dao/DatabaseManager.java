@@ -11,14 +11,18 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exception.ApplicationException;
 import pojo.AccountPojo;
 import pojo.TransactionPojo;
+import presentation.Project_Demo;
 
 public class DatabaseManager implements AccountDao {
 
 	public static DatabaseManager databaseManager = null;
-
+	private static final Logger logger = LoggerFactory.getLogger(Project_Demo.class); 
 	public static DatabaseManager getInstance() {
 		if (databaseManager == null) {
 			databaseManager = new DatabaseManager();
@@ -27,7 +31,7 @@ public class DatabaseManager implements AccountDao {
 	}
 
 	public List<AccountPojo> getAllAccount() throws ApplicationException {
-
+		logger.info("Invoking getAllAccount in dao layer");
 		try {
 			Connection newConnection = DBUtil.makeConnection();
 			Statement statement = newConnection.createStatement();
@@ -54,7 +58,7 @@ public class DatabaseManager implements AccountDao {
 	}
 
 	public AccountPojo createAccount(AccountPojo accountPojo) throws ApplicationException {
-
+		logger.info("Invoking createAccount in dao layer");
 		String sqlString = "INSERT INTO account(first_name,last_name,password,balance,user_name) VALUES(?,?,?,?,?);";
 		try {
 			Connection newConnection = DBUtil.makeConnection();
@@ -84,11 +88,13 @@ public class DatabaseManager implements AccountDao {
 	}
 
 	public AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate) throws ApplicationException {
+		logger.info("Invoking updateAccount in dao layer");
 		// TODO Auto-generated method stub
 		return handleUpdate.performUpdate(accountPojo);
 	}
 
 	public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
+		logger.info("Invoking deleteAccount in dao layer");
 		// TODO Auto-generated method stub
 		String sqlString = "DELETE FROM account WHERE id= ?;";
 		try {
@@ -105,6 +111,7 @@ public class DatabaseManager implements AccountDao {
 	}
 
 	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
+		logger.info("Invoking getOneAccount in dao layer");
 		// TODO Auto-generated method stub
 		try {
 			return handleGetOneAccount.handleGetOneAccount(accountPojo);
@@ -115,6 +122,7 @@ public class DatabaseManager implements AccountDao {
 	}
 
 	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions) throws ApplicationException {
+		logger.info("Invoking getTransactions in dao layer");
 		// TODO Auto-generated method stub
 		try {
 			Connection newConnection = DBUtil.makeConnection();
