@@ -36,11 +36,11 @@ public class HandleGetOneEmployeeImp implements HandleGetOneAccount {
 			return accountPojo;
 		}
 		catch(SQLException e) {
-			e.printStackTrace();
+			throw new ApplicationException("Unable to get Account");
 		}
 		
 		
-		return null;
+		
 	}
 
 }

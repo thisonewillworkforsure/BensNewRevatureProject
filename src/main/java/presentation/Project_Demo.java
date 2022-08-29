@@ -332,9 +332,14 @@ public class Project_Demo {
 					System.out.println(e.getMessage());
 					break;
 				}
+				if(accountPojo!= null) {
 				System.out.println("Your account was succesfully deleted, you will pay for- I mean have a good day!");
 				isCustomerMenuDone = true;
-
+				accountPojo = null;
+				}
+				else {
+					System.out.println("Failed to delete, please try again later (or not).");
+				}
 				break;
 			case '6':
 				System.out.println("Logging out");

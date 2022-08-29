@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import exception.ApplicationException;
 import pojo.AccountPojo;
 
-public class HandleGetOneCustomerImp implements HandleGetOneAccount {
+public class HandleGetOneClosedAccImp implements HandleGetOneAccount {
 
 	public AccountPojo handleGetOneAccount(AccountPojo accountPojo) throws ApplicationException {
-
-		String sqlString = "SELECT * FROM account WHERE user_name= ?";
+		// TODO Auto-generated method stub
+		String sqlString = "SELECT * FROM closed_account WHERE account_id= ?";
 		try {
 			Connection newConnection = null;
 			try {
@@ -22,26 +22,18 @@ public class HandleGetOneCustomerImp implements HandleGetOneAccount {
 				e.printStackTrace();
 			}
 			PreparedStatement preparedStatement = newConnection.prepareCall(sqlString);
-			preparedStatement.setString(1, accountPojo.getUserName());
+			preparedStatement.setInt(1, accountPojo.getId());
 			ResultSet resultSet = preparedStatement.executeQuery();
-			boolean isnull = true;
-			while (resultSet.next()) {
-				isnull = false;
-				accountPojo.setId(resultSet.getInt("id"));
-				accountPojo.setBalance(resultSet.getFloat("balance"));
-				accountPojo.setFirstName(resultSet.getString("first_name"));
-				accountPojo.setLastName(resultSet.getString("last_name"));
-				accountPojo.setUserName(resultSet.getString("user_name"));
-				accountPojo.setPassword(resultSet.getString("password"));
+			if(resultSet.next()) {
+				accountPojo.setId(resultSet.getInt("account_id"));
+				return accountPojo;
 			}
-			if (isnull)
+			else {
 				return null;
-			return accountPojo;
+			}
 		} catch (SQLException e) {
 			throw new ApplicationException("Unable to get Account");
 		}
-
-	
 
 	}
 

@@ -36,7 +36,12 @@ public class DatabaseManager implements AccountDao {
 			Connection newConnection = DBUtil.makeConnection();
 			Statement statement = newConnection.createStatement();
 
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM account;");
+			String queryString = "SELECT account.id,account.first_name,account.last_name,account.password,account.balance,account.user_name FROM account LEFT OUTER JOIN closed_account ON closed_account.account_id = account.id WHERE closed_account.closed_date IS NULL;";
+			String actualString = "SELECT * FROM account";
+			
+			
+			
+			ResultSet resultSet = statement.executeQuery(queryString);
 			List<AccountPojo> accountPojos = new ArrayList<AccountPojo>();
 
 			while (resultSet.next()) {
@@ -93,7 +98,7 @@ public class DatabaseManager implements AccountDao {
 		return handleUpdate.performUpdate(accountPojo);
 	}
 
-	public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
+	/*public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
 		logger.info("Invoking deleteAccount in dao layer");
 		// TODO Auto-generated method stub
 		String sqlString = "DELETE FROM account WHERE id= ?;";
@@ -105,18 +110,41 @@ public class DatabaseManager implements AccountDao {
 			if (rowsAffected > 0)
 				accountPojo = null;
 		} catch (SQLException e) {
-			throw new ApplicationException();
+			throw new ApplicationException("Failed to delete account, please try again another time");
+		}
+
+	}*/
+	
+	
+	public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
+		logger.info("Invoking deleteAccount in dao layer");
+		// TODO Auto-generated method stub
+		String sqlString = "INSERT INTO closed_account(account_id, closed_date) VALUES(?,?);";
+		try {
+			Connection newConnection = DBUtil.makeConnection();
+			PreparedStatement preparedStatement = newConnection.prepareCall(sqlString);
+			preparedStatement.setInt(1, accountPojo.getId());
+			preparedStatement.setString(2, LocalDate.now().toString());
+			int rowsAffected = preparedStatement.executeUpdate();
+			if (rowsAffected > 0)
+				accountPojo = null;
+		} catch (SQLException e) {
+			throw new ApplicationException("Failed to delete account, please try again another time");
 		}
 
 	}
+	
+	
+	
+	
 
 	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
 		logger.info("Invoking getOneAccount in dao layer");
 		// TODO Auto-generated method stub
 		try {
 			return handleGetOneAccount.handleGetOneAccount(accountPojo);
-		} catch (Exception e) {
-			throw new ApplicationException();
+		} catch (ApplicationException e) {
+			throw e;
 		}
 		
 	}
@@ -153,7 +181,7 @@ public class DatabaseManager implements AccountDao {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new ApplicationException();
+			throw new ApplicationException("Failed to get transactions, please try again another time");
 		}
 
 	}

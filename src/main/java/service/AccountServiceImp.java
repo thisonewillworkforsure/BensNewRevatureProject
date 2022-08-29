@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import dao.AccountDao;
 import dao.DatabaseManager;
 import dao.HandleGetOneAccount;
+import dao.HandleGetOneClosedAccImp;
 import dao.HandleUpdate;
 import exception.ApplicationException;
 import pojo.AccountPojo;
@@ -75,11 +76,28 @@ public class AccountServiceImp implements AccountService {
 		}
 	}
 
-	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
+	/*public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
 		logger.info("Invoking getOneAccount");
 		// TODO Auto-generated method stub
 		try {
 			return accountDao.getOneAccount(accountPojo, handleGetOneAccount);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw e;
+		}
+	}*/
+	
+	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
+		logger.info("Invoking getOneAccount");
+		AccountPojo possiblePojo = null;
+		try {
+			possiblePojo = accountDao.getOneAccount(accountPojo, handleGetOneAccount);
+			if(possiblePojo == null) return null;
+			if(isAccountOpen(possiblePojo)) return possiblePojo;
+			else {
+				throw new ApplicationException("Sorry Acount is closed");
+			}
+			
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
 			throw e;
@@ -99,5 +117,21 @@ public class AccountServiceImp implements AccountService {
 		}
 		return transactionPojos;
 	}
+	
+	private boolean isAccountOpen(AccountPojo accountPojo) throws ApplicationException {
+		try {
+			if(accountDao.getOneAccount(accountPojo, new HandleGetOneClosedAccImp()) != null) {
+				return false;
+			}
+			else {
+				return true;
+			}
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			throw e;
+		}
+	}
+	
+	
 
 }
