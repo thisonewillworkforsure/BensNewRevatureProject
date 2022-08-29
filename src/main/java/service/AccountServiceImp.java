@@ -75,17 +75,6 @@ public class AccountServiceImp implements AccountService {
 			throw e;
 		}
 	}
-
-	/*public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
-		logger.info("Invoking getOneAccount");
-		// TODO Auto-generated method stub
-		try {
-			return accountDao.getOneAccount(accountPojo, handleGetOneAccount);
-		} catch (ApplicationException e) {
-			// TODO Auto-generated catch block
-			throw e;
-		}
-	}*/
 	
 	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
 		logger.info("Invoking getOneAccount");
@@ -128,6 +117,15 @@ public class AccountServiceImp implements AccountService {
 			}
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
+			throw e;
+		}
+	}
+
+
+	public AccountPojo transferToAccount(AccountPojo fromPojo, AccountPojo toPojo) throws ApplicationException {
+		try {
+			return accountDao.transferToAccount(fromPojo, toPojo);
+		} catch (ApplicationException e) {
 			throw e;
 		}
 	}

@@ -40,7 +40,7 @@ public class Project_Demo {
 	private static AccountPojo accountPojo;
 	private static AccountService accountServiceImp;
 	private static HandleUpdate handleUpdate;
-
+	private static float amountToWithdraw = 0f;
 	private static void bla() {
 		System.out.println("whoaaaaaaaa");
 	}
@@ -183,9 +183,10 @@ public class Project_Demo {
 			System.out.println("1. View account details");
 			System.out.println("2. Deposit");
 			System.out.println("3. Withdraw");
-			System.out.println("4. View Transaction History");
-			System.out.println("5. Close Account");
-			System.out.println("6. Logout");
+			System.out.println("4. Transfer");
+			System.out.println("5. View Transaction History");
+			System.out.println("6. Close Account");
+			System.out.println("7. Logout");
 			int choice;
 			choice = scannerHandler.getInputChar();
 
@@ -237,27 +238,8 @@ public class Project_Demo {
 				}
 				break;
 			case '3':
-				System.out.println("How much you want taken out?");
-				float amountFloatWithdraw = 0f;
-				try {
-					amountFloatWithdraw = scannerHandler.getInputFloat();
-				} catch (Exception e) {
-					System.out.println("Invalid input, please try again!");
-					break;
-				}
-				try {
-					accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
-				} catch (ApplicationException e) {
-					// TODO Auto-generated catch block
-					System.out.println(e.getMessage());
-					break;
-				}
-				float currentBalanceWithdraw = accountPojo.getBalance();
-				if (currentBalanceWithdraw - amountFloatWithdraw < 0) {
-					System.out.println("You are withdrawing more than thats in the account...");
-					break;
-				}
-				accountPojo.setBalanceChangeAmount(amountFloatWithdraw * -1);
+				if(!isAbleToWithdraw()) break;
+				accountPojo.setBalanceChangeAmount(amountToWithdraw * -1);
 				handleUpdate = new HandleUpdateBalanceImp();
 				try {
 					accountPojo = accountServiceImp.updateAccount(accountPojo, handleUpdate);
@@ -272,7 +254,36 @@ public class Project_Demo {
 					System.out.println("Error retrieving account");
 				}
 				break;
+				
 			case '4':
+				if(!isAbleToWithdraw()) break;
+				accountPojo.setBalanceChangeAmount(amountToWithdraw * -1);
+				System.out.println("Enter the user name of who you want to transfer the money to");
+				String otherUserName = scannerHandler.getInputString();
+				AccountPojo otherPojo = new AccountPojo();
+				otherPojo.setUserName(otherUserName);
+				try {
+					otherPojo = accountServiceImp.getOneAccount(otherPojo, new HandleGetOneCustomerImp());
+					if(otherPojo == null) {
+						System.out.println("Had trouble finding the recipient, please try again later");
+						break;
+					}
+					accountPojo = accountServiceImp.transferToAccount(accountPojo, otherPojo);
+					if(accountPojo != null) {
+						System.out.println("Success! The money has been transferred.");
+					}
+					else {
+						System.out.println("Had trouble transferring the funds, please try again later.");
+						break;
+					}
+				} catch (ApplicationException e) {
+					// TODO Auto-generated catch block
+					System.out.println(e.getMessage());
+					break;
+				}
+				break;
+				
+			case '5':
 				System.out.println("Viewing Transaction History");
 				try {
 					accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
@@ -304,7 +315,7 @@ public class Project_Demo {
 					System.out.println(transactionPojos.get(i));
 				}
 				break;
-			case '5':
+			case '6':
 				try {
 					accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
 				} catch (ApplicationException e) {
@@ -341,7 +352,7 @@ public class Project_Demo {
 					System.out.println("Failed to delete, please try again later (or not).");
 				}
 				break;
-			case '6':
+			case '7':
 				System.out.println("Logging out");
 				isCustomerMenuDone = true;
 				break;
@@ -421,5 +432,29 @@ public class Project_Demo {
 		}
 
 	}
+	
+	private static boolean isAbleToWithdraw() {
+		System.out.println("How much you want taken out?");
+		try {
+			amountToWithdraw = scannerHandler.getInputFloat();
+		} catch (Exception e) {
+			System.out.println("Invalid input, please try again!");
+			return false;
+		}
+		try {
+			accountPojo = accountServiceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			return false;
+		}
+		float currentBalanceWithdraw = accountPojo.getBalance();
+		if (currentBalanceWithdraw - amountToWithdraw < 0) {
+			System.out.println("You are withdrawing more than thats in the account...");
+			return false;
+		}
+		return true;
+	}
+	
 
 }

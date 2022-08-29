@@ -97,25 +97,7 @@ public class DatabaseManager implements AccountDao {
 		// TODO Auto-generated method stub
 		return handleUpdate.performUpdate(accountPojo);
 	}
-
-	/*public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
-		logger.info("Invoking deleteAccount in dao layer");
-		// TODO Auto-generated method stub
-		String sqlString = "DELETE FROM account WHERE id= ?;";
-		try {
-			Connection newConnection = DBUtil.makeConnection();
-			PreparedStatement preparedStatement = newConnection.prepareCall(sqlString);
-			preparedStatement.setInt(1, accountPojo.getId());
-			int rowsAffected = preparedStatement.executeUpdate();
-			if (rowsAffected > 0)
-				accountPojo = null;
-		} catch (SQLException e) {
-			throw new ApplicationException("Failed to delete account, please try again another time");
-		}
-
-	}*/
-	
-	
+		
 	public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
 		logger.info("Invoking deleteAccount in dao layer");
 		// TODO Auto-generated method stub
@@ -133,9 +115,6 @@ public class DatabaseManager implements AccountDao {
 		}
 
 	}
-	
-	
-	
 	
 
 	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
@@ -184,6 +163,20 @@ public class DatabaseManager implements AccountDao {
 			throw new ApplicationException("Failed to get transactions, please try again another time");
 		}
 
+	}
+
+	public AccountPojo transferToAccount(AccountPojo fromPojo, AccountPojo toPojo) throws ApplicationException {
+		try {
+			float balanceAmt = fromPojo.getBalanceChangeAmount();
+			fromPojo = updateAccount(fromPojo, new HandleUpdateBalanceImp());
+			toPojo.setBalanceChangeAmount(balanceAmt * -1);
+			toPojo = updateAccount(toPojo, new HandleUpdateBalanceImp());
+			if(fromPojo == null || toPojo == null) fromPojo = null;
+			return fromPojo;
+		} catch (ApplicationException e) {
+			throw e;
+		}
+		
 	}
 
 }

@@ -4,7 +4,5 @@ TODO list:
 
 2. clean up the output in the presentation layer
 
-3. recipient for transactions
-
 
 
