@@ -1,15 +1,20 @@
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.BDDMockito.Then;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import dao.AccountDao;
+import dao.DatabaseManager;
 import dao.HandleGetOneCustomerImp;
 import exception.ApplicationException;
 import pojo.AccountPojo;
@@ -20,10 +25,11 @@ import service.AccountServiceImp;
 @ExtendWith(MockitoExtension.class)
 public class ServiceImpTest {
 
+	@InjectMocks
+	AccountServiceImp accountServiceImp;
+
 	@Mock
-	AccountPojo accountPojo;
-	
-	
+	DatabaseManager accountDao;
 	@Test
 	public void testGetOneAccountPojo() {
 
@@ -46,83 +52,35 @@ public class ServiceImpTest {
 	@Test
 	public void testGetOneAccountPojoWithMockito() {
 
-		AccountPojo dummyPojo;
-		dummyPojo = Mockito.mock(AccountPojo.class);
-		AccountPojo accountPojo = new AccountPojo();
+		AccountPojo dummyPojo = new AccountPojo();
 		dummyPojo.setUserName("cd");
 		dummyPojo.setPassword("cd");
 		dummyPojo.setId(4);
-		AccountService serviceImp = new AccountServiceImp();
-		int expectedID = 4;
+		HandleGetOneCustomerImp bla = new HandleGetOneCustomerImp();
 		try {
-			//doReturn(fooBar).when(bar).getFoo()
-			doReturn(dummyPojo).when(serviceImp.getOneAccount(dummyPojo, new HandleGetOneCustomerImp()));
-			//when(serviceImp.getOneAccount(dummyPojo, new HandleGetOneCustomerImp())).thenReturn(dummyPojo);
-			dummyPojo = serviceImp.getOneAccount(dummyPojo, new HandleGetOneCustomerImp());
-			assertEquals(expectedID, dummyPojo.getId());
+			Mockito.lenient().when(accountServiceImp.getOneAccount(dummyPojo, bla)).thenReturn(dummyPojo);
+			
+		} catch (ApplicationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		AccountPojo actualPojo = null;
+		
+		
+		try {
+			// the bookService declared at class level is used here
+			actualPojo = accountServiceImp.getOneAccount(dummyPojo,bla); // here when i call a methodof the service layer, it in turn call a method of dao
+														// according to unit testing the method that we are testing should be tested in isolation
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
-			assertEquals(expectedID, -1);
-		} catch (NullPointerException e) {
-			assertEquals(expectedID, -1);
+			e.printStackTrace();
 		}
+		
+		assertEquals(dummyPojo.getId(), actualPojo.getId());	
 	}
 	
-	public void testy() {
-		
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	
-	@Test
-	public void testReturnNullGetOneAccountPojo() {
 
-		AccountPojo accountPojo = new AccountPojo();
-		accountPojo.setUserName("cde");
-		accountPojo.setPassword("cd");
-		AccountService serviceImp = new AccountServiceImp();
-		try {
-			accountPojo = serviceImp.getOneAccount(accountPojo, new HandleGetOneCustomerImp());
-			assertEquals(null, accountPojo);
-		} catch (ApplicationException e) {
-			// TODO Auto-generated catch block
-			assertEquals(0, -1);
-		} catch (NullPointerException e) {
-			assertEquals(0, -1);
-		}
-	}
-	
-	@Test
-	public void testCreateOneAccountPojo() {
-
-		AccountPojo accountPojo = new AccountPojo();
-		accountPojo.setUserName("testy");
-		accountPojo.setPassword("testerson");
-		accountPojo.setBalanceChangeAmount(500);
-		accountPojo.setFirstName("testy");
-		accountPojo.setLastName("testerson");
-		
-		AccountService serviceImp = new AccountServiceImp();
-		try {
-			accountPojo = serviceImp.createAccount(accountPojo);
-			assertEquals(null, accountPojo);
-		} catch (ApplicationException e) {
-			// TODO Auto-generated catch block
-			assertEquals(0, -1);
-		} catch (NullPointerException e) {
-			assertEquals(0, -1);
-		}
-	}
-	*/
-	
 	
 	
 }
