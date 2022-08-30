@@ -16,14 +16,15 @@ public class HandleUpdateBalanceImp implements HandleUpdate {
 		
 		String sqlString = "UPDATE account SET balance = ? WHERE id = ?";
 		String accountString = "INSERT INTO bank_transaction(account_id,transaction_date,transaction_type,transaction_amount) VALUES(?,?,?,?);";
+		Connection newConnection = null;
 		try{
-			Connection newConnection = null;
 			try {
 				newConnection = DBUtil.makeConnection();
 			} catch (ApplicationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			newConnection.setAutoCommit(false);
 			PreparedStatement preparedStatement = newConnection.prepareStatement(sqlString);
 			preparedStatement.setDouble(1, accountPojo.getBalance()+accountPojo.getBalanceChangeAmount());
 			preparedStatement.setInt(2, accountPojo.getId());
@@ -34,11 +35,19 @@ public class HandleUpdateBalanceImp implements HandleUpdate {
 			preparedStatement.setString(3,accountPojo.getBalanceChangeAmount() > 0? "DEPOSIT" : "WITHDRAW");
 			preparedStatement.setFloat(4,accountPojo.getBalanceChangeAmount());
 			int transactionRowsAffected = preparedStatement.executeUpdate();
-			if(rowsAffected > 0) {
+			newConnection.commit();
+			if(rowsAffected > 0 && transactionRowsAffected > 0) {
 				accountPojo.setBalance(accountPojo.getBalance()+accountPojo.getBalanceChangeAmount());
 				return accountPojo;}
+			
 		}
 		catch(SQLException e) {
+			try {
+				newConnection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				throw new ApplicationException("Database error please try again!");
+			}
 			throw new ApplicationException();
 		}
 		

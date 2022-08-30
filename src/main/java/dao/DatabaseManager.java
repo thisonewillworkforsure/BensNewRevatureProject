@@ -166,15 +166,28 @@ public class DatabaseManager implements AccountDao {
 	}
 
 	public AccountPojo transferToAccount(AccountPojo fromPojo, AccountPojo toPojo) throws ApplicationException {
+			Connection newConnection = null;
 		try {
+			newConnection = DBUtil.makeConnection();
+			newConnection.setAutoCommit(false);
 			float balanceAmt = fromPojo.getBalanceChangeAmount();
 			fromPojo = updateAccount(fromPojo, new HandleUpdateBalanceImp());
 			toPojo.setBalanceChangeAmount(balanceAmt * -1);
 			toPojo = updateAccount(toPojo, new HandleUpdateBalanceImp());
 			if(fromPojo == null || toPojo == null) fromPojo = null;
+			newConnection.commit();
 			return fromPojo;
 		} catch (ApplicationException e) {
 			throw e;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			try {
+				newConnection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new ApplicationException("Database error please try again later");
 		}
 		
 	}
