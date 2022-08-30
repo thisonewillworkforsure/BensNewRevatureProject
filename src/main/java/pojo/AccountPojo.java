@@ -89,8 +89,8 @@ private int id;
 
 	@Override
 	public String toString() {
-		return "AccountPojo [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", userName="
-				+ userName + ", password=" + password + ", balance=" + balance + "]";
+		return "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", userName="
+				+ userName + ", password=" + password + ", balance=" + balance;
 	}
 
 	

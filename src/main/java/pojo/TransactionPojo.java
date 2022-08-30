@@ -58,9 +58,10 @@ public class TransactionPojo {
 	
 	@Override
 	public String toString() {
+		String padString = "";
+		if(transactionType.equals("DEPOSIT")) padString = " ";
 		return "transactionDate= "
-				+ transactionDate + ", transactionType=" + transactionType + ", transactionAmount=" + transactionAmount
-				+ "]";
+				+ transactionDate + ", transactionType=" + transactionType + "," + padString + "transactionAmount=" + padString + transactionAmount;
 	}
 	
 	

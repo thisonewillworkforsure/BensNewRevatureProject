@@ -40,6 +40,7 @@ public class Project_Demo {
 	private static AccountPojo accountPojo;
 	private static AccountService accountServiceImp;
 	private static HandleUpdate handleUpdate;
+	private static OutputHandler outputHandler;
 	private static float amountToWithdraw = 0f;
 	private static void bla() {
 		System.out.println("whoaaaaaaaa");
@@ -50,6 +51,7 @@ public class Project_Demo {
 		//BasicConfigurator.configure();
 		logger.info("Starting the application!");
 		scannerHandler = new ScannerHandler();
+		outputHandler = new OutputHandler();
 		accountServiceImp = new AccountServiceImp();
 		System.out.println("Hello and Welcome to Umbrella Corporation's Console Banking!");
 		boolean isDone = false;
@@ -155,9 +157,10 @@ public class Project_Demo {
 					System.out.println(e.getMessage());
 					break;
 				}
-				for (int i = 0; i < accountPojos.size(); i++) {
+				outputHandler.OutputAccountPojos(accountPojos);
+				/*for (int i = 0; i < accountPojos.size(); i++) {
 					System.out.println(accountPojos.get(i));
-				}
+				}*/
 				break;
 			case '3':
 				System.out.println("3. Logging out");
