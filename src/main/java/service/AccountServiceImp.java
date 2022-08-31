@@ -30,7 +30,7 @@ public class AccountServiceImp implements AccountService {
 	
 	
 	public List<AccountPojo> getAllAccount() throws ApplicationException {
-		logger.info("Invoking getAllAccount");
+		//logger.info("Invoking getAllAccount");
 		// TODO Auto-generated method stub
 		List<AccountPojo> accountPojos = new ArrayList<AccountPojo>();
 		try {
@@ -43,7 +43,7 @@ public class AccountServiceImp implements AccountService {
 	}
 
 	public AccountPojo createAccount(AccountPojo accountPojo) throws ApplicationException {
-		logger.info("Invoking createAccount");
+		//logger.info("Invoking createAccount");
 		// TODO Auto-generated method stub
 		try {
 			accountPojo = accountDao.createAccount(accountPojo);
@@ -55,7 +55,7 @@ public class AccountServiceImp implements AccountService {
 	}
 
 	public AccountPojo updateAccount(AccountPojo accountPojo, HandleUpdate handleUpdate) throws ApplicationException {
-		logger.info("Invoking updateAccount");
+		//logger.info("Invoking updateAccount");
 		// TODO Auto-generated method stub
 		try {
 			return accountDao.updateAccount(accountPojo, handleUpdate);
@@ -66,7 +66,7 @@ public class AccountServiceImp implements AccountService {
 	}
 
 	public void deleteAccount(AccountPojo accountPojo) throws ApplicationException {
-		logger.info("Invoking deleteAccount");
+		//logger.info("Invoking deleteAccount");
 		// TODO Auto-generated method stub
 		try {
 			accountDao.deleteAccount(accountPojo);
@@ -77,7 +77,7 @@ public class AccountServiceImp implements AccountService {
 	}
 	
 	public AccountPojo getOneAccount(AccountPojo accountPojo, HandleGetOneAccount handleGetOneAccount) throws ApplicationException {
-		logger.info("Invoking getOneAccount");
+		//logger.info("Invoking getOneAccount");
 		AccountPojo possiblePojo = null;
 		try {
 			possiblePojo = accountDao.getOneAccount(accountPojo, handleGetOneAccount);
@@ -95,7 +95,7 @@ public class AccountServiceImp implements AccountService {
 
 
 	public List<TransactionPojo> getTransactions(AccountPojo accountPojo, int amountTransactions) throws ApplicationException {
-		logger.info("Invoking getTransactions");
+		//logger.info("Invoking getTransactions");
 		// TODO Auto-generated method stub
 		List<TransactionPojo> transactionPojos = new ArrayList<TransactionPojo>();
 		try {

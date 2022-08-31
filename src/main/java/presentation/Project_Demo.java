@@ -49,7 +49,7 @@ public class Project_Demo {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//BasicConfigurator.configure();
-		logger.info("Starting the application!");
+		//logger.info("Starting the application!");
 		scannerHandler = new ScannerHandler();
 		outputHandler = new OutputHandler();
 		accountServiceImp = new AccountServiceImp();
@@ -119,12 +119,28 @@ public class Project_Demo {
 				accountPojo = new AccountPojo();
 				System.out.println("first name");
 				accountPojo.setFirstName(scannerHandler.getInputString());
+				if(accountPojo.getFirstName().isEmpty()) {
+					System.out.println("Can't be nothing, try again!");
+					break;
+				}
 				System.out.println("last name");
 				accountPojo.setLastName(scannerHandler.getInputString());
+				if(accountPojo.getLastName().isEmpty()) {
+					System.out.println("Can't be nothing, try again!");
+					break;
+				}
 				System.out.println("enter userName");
 				accountPojo.setUserName(scannerHandler.getInputString());
+				if(accountPojo.getUserName().isEmpty()) {
+					System.out.println("Can't be nothing, try again!");
+					break;
+				}
 				System.out.println("enter password");
 				accountPojo.setPassword(scannerHandler.getInputString());
+				if(accountPojo.getPassword().isEmpty()) {
+					System.out.println("Can't be nothing, try again!");
+					break;
+				}
 				System.out.print("any money to put in now?");
 				float amountFloat;
 				try {
